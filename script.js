@@ -70,49 +70,64 @@ const renderCountry = function (data, className = '') {
   countriesContainer.style.opacity = 1;
 };
 
-const getCountryAndNeighbour = function (country) {
-  // ajax call country 1
-  const request = new XMLHttpRequest();
-  request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
-  request.send();
+// const getCountryAndNeighbour = function (country) {
+//   // ajax call country 1
+//   const request = new XMLHttpRequest();
+//   request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
+//   request.send();
 
-  request.addEventListener('load', function () {
-    const [data] = JSON.parse(this.responseText);
-    console.log(data);
+//   request.addEventListener('load', function () {
+//     const [data] = JSON.parse(this.responseText);
+//     console.log(data);
 
-    // render country 1
-    renderCountry(data);
+//     // render country 1
+//     renderCountry(data);
 
-    // Get neiggbour country 2
-    const [neighbour] = data.borders;
+//     // Get neiggbour country 2
+//     const [neighbour] = data.borders;
 
-    if (!neighbour) return;
+//     if (!neighbour) return;
 
-    // ajax call country 2
-    const request2 = new XMLHttpRequest();
-    request2.open('GET', `https://restcountries.com/v3.1/alpha/${neighbour}`);
-    request2.send();
+//     // ajax call country 2
+//     const request2 = new XMLHttpRequest();
+//     request2.open('GET', `https://restcountries.com/v3.1/alpha/${neighbour}`);
+//     request2.send();
 
-    request2.addEventListener('load', function () {
-      const [data] = JSON.parse(this.responseText);
-      console.log(data);
+//     request2.addEventListener('load', function () {
+//       const [data] = JSON.parse(this.responseText);
+//       console.log(data);
 
-      renderCountry(data, 'neighbour');
-    });
-  });
+//       renderCountry(data, 'neighbour');
+//     });
+//   });
+// };
+
+// getCountryAndNeighbour('poland');
+
+// setTimeout(() => {
+//   console.log('1 second passed');
+//   setTimeout(() => {
+//     console.log('2 second past');
+//     setTimeout(() => {
+//       console.log('3 second past');
+//       setTimeout(() => {
+//         console.log('4 second past');
+//       }, 4000);
+//     }, 3000);
+//   }, 2000);
+// }, 1000);
+
+// const request = new XMLHttpRequest();
+//   request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
+//   request.send();
+
+// const request = fetch('https://restcountries.com/v3.1/name/portugal');
+// console.log(request);
+
+const getCountryData = function (country) {
+  fetch(`https://restcountries.com/v3.1/name/${country}`)
+    .then(response => response.json())
+    .then(date => renderCountry(date[0]));
 };
 
-getCountryAndNeighbour('norway');
-
-setTimeout(() => {
-  console.log('1 second passed');
-  setTimeout(() => {
-    console.log('2 second past');
-    setTimeout(() => {
-      console.log('3 second past');
-      setTimeout(() => {
-        console.log('4 second past');
-      }, 4000);
-    }, 3000);
-  }, 2000);
-}, 1000);
+getCountryData('portugal');
