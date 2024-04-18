@@ -67,12 +67,11 @@ const renderCountry = function (data, className = '') {
   `;
 
   countriesContainer.insertAdjacentHTML('beforeend', html);
-  countriesContainer.style.opacity = 1;
 };
 
-// const renderError = function (msg) {
-//   countriesContainer.insertAdjacentText('beforeend', msg);
-// };
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+};
 
 // const getCountryAndNeighbour = function (country) {
 //   // ajax call country 1
@@ -350,17 +349,25 @@ const getPosition = function () {
 };
 
 const whereAmI = async function () {
-  const pos = await getPosition();
-  const { latitude: lat, longitude: lan } = pos.coords;
+  try {
+    const pos = await getPosition();
+    const { latitude: lat, longitude: lan } = pos.coords;
 
-  const resGeo = await fetch(`https://geocode.xyz/${lat},${lan}?geoit=json`);
-  const dataGeo = await resGeo.json();
-  const res = await fetch(
-    `https://restcountries.com/v3.1/name/${dataGeo.country}`
-  );
-  const data = await res.json();
-  renderCountry(data[0]);
+    const resGeo = await fetch(`https://geocode.xyz/${lat},${lan}?geoit=json`);
+    if (!resGeo.ok) throw new Error('Problem getting location data!');
+    const dataGeo = await resGeo.json();
+    const res = await fetch(
+      `https://restcountries.com/v3.1/name/${dataGeo.country}`
+    );
+    if (!res.ok) throw new Error('Problem getting country');
+    const data = await res.json();
+    renderCountry(data[0]);
+  } catch (err) {
+    renderError(`💥 ${err}`);
+  } finally {
+    countriesContainer.style.opacity = 1;
+  }
 };
 
-whereAmI('portugal');
+whereAmI();
 console.log('FIRST');
