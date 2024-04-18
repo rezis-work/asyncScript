@@ -163,29 +163,38 @@ const renderCountry = function (data, className = '') {
 //   getCountryData('australia');
 // });
 
-const whereAmI = function (lat, lan) {
-  fetch(`https://geocode.xyz/${lat},${lan}?geoit=json`)
-    .then(response => {
-      if (!response.ok)
-        throw new Error(`Problem with geoCoding! ${response.status}`);
-      return response.json();
-    })
-    .then(data => {
-      if (!data.country) throw new Error(`Problem with geoCoding!`);
-      console.log(data);
-      console.log(`You are in ${data.city} ${data.country}`);
+// const whereAmI = function (lat, lan) {
+//   fetch(`https://geocode.xyz/${lat},${lan}?geoit=json`)
+//     .then(response => {
+//       if (!response.ok)
+//         throw new Error(`Problem with geoCoding! ${response.status}`);
+//       return response.json();
+//     })
+//     .then(data => {
+//       if (!data.country) throw new Error(`Problem with geoCoding!`);
+//       console.log(data);
+//       console.log(`You are in ${data.city} ${data.country}`);
 
-      return fetch(`https://restcountries.com/v3.1/name/${data.country}`);
-    })
-    .then(resp => {
-      if (!resp.ok) throw new Error(`Country not found ${resp.status}`);
-      return resp.json();
-    })
-    .then(data => renderCountry(data[0]))
-    .catch(err => console.log(`${err.message} Error!`))
-    .finally(() => {
-      countriesContainer.style.opacity = 1;
-    });
-};
+//       return fetch(`https://restcountries.com/v3.1/name/${data.country}`);
+//     })
+//     .then(resp => {
+//       if (!resp.ok) throw new Error(`Country not found ${resp.status}`);
+//       return resp.json();
+//     })
+//     .then(data => renderCountry(data[0]))
+//     .catch(err => console.log(`${err.message} Error!`))
+//     .finally(() => {
+//       countriesContainer.style.opacity = 1;
+//     });
+// };
 
-whereAmI(52.508, 13.381);
+// whereAmI(52.508, 13.381);
+
+console.log('test start');
+setTimeout(() => console.log('o sec timer'), 0);
+Promise.resolve('Resolved promise one').then(res => console.log(res));
+
+Promise.resolve('Resolved promise two').then(res => {
+  console.log(res);
+});
+console.log('test end');
