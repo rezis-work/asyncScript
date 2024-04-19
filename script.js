@@ -356,18 +356,41 @@ const whereAmI = async function () {
     const resGeo = await fetch(`https://geocode.xyz/${lat},${lan}?geoit=json`);
     if (!resGeo.ok) throw new Error('Problem getting location data!');
     const dataGeo = await resGeo.json();
+
     const res = await fetch(
       `https://restcountries.com/v3.1/name/${dataGeo.country}`
     );
     if (!res.ok) throw new Error('Problem getting country');
     const data = await res.json();
     renderCountry(data[0]);
+
+    return `You are in ${dataGeo.city}, ${dataGeo.country}`;
   } catch (err) {
     renderError(`💥 ${err}`);
+
+    // reject prmise returned from async function
+    throw err;
   } finally {
     countriesContainer.style.opacity = 1;
   }
 };
 
-whereAmI();
-console.log('FIRST');
+console.log('1: Will get location');
+
+// const city = whereAmI();
+// console.log(city);
+// whereAmI()
+//   .then(city => console.log(city))
+//   .catch(err => console.error(`2: ${err.message}`))
+//   .finally(() => console.log('3: finished getting location'));
+
+(async function () {
+  try {
+    const city = await whereAmI();
+    console.log(`2: ${city}`);
+  } catch (err) {
+    console.error(`2: ${err.message}`);
+  } finally {
+    console.log('3: finished getting location');
+  }
+})();
